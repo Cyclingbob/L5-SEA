@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/public/base.css">
+        <title>Home Page</title>
+    </head>
+    <body>
+        <div class="content">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    {% if current_user.isAdmin %}
+                        <a href="/admin">Administration</a>
+                    {% endif %}
+                <a href="/components">All Components</a>
+                    <a href="/logout">Logout</a>
+                </nav>
+            </header>
+            <h1>Administration, {{ current_user.first_name }} {{ current_user.surname }}
+                {% if current_user.isAdmin %}
+                (Administrator)
+                {% endif %}
+            </h1>
+            <h2>Projects</h2>
+            {% if len(all_projects) == 0 %}
+                <p>No projects exist yet.</p>
+            {% else %}
+                <table>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Project Category</th>
+                        <th>Project Description</th>
+                        <th>Access</th>
+                    </tr>
+                    {% for project in all_projects %}
+                        <tr>
+                            <td>{{ project.name }}</td>
+                            <td>{{ project.category }}</td>
+                            <td>{{ project.description }}</td>
+                            <td>
+                                <a href="/project/{{ project.id }}">
+                                    <button>Access</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            <h2>Create a project</h2>
+            <form id="create-project-form">
+                <input type="text" placeholder="Enter name: " maxlength="254" required>
+                <input type="text" placeholder="Enter category: " maxlength="254" required>
+                <input type="text" placeholder="Enter description: " required>
+                <input type="submit" value="Create Project">
+            </form>
+            <h2>All users</h2>
+            <table>
+                <tr>
+                    <th>First name</th>
+                    <th>Surname</th>
+                    <th>Email</th>
+                    <th>ID</th>
+                    <th>View</th>
+                </tr>
+                {% for user in all_users %}
+                <tr>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.surname }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.id }}</td>
+                    <td>
+                        <a href="/user/{{ user.id }}">
+                            <button>View</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <h2>Create a new user</h2>
+            <form id="create-user-form">
+                <input type="text" placeholder="Enter first name: " maxlength="254" required>
+                <input type="text" placeholder="Enter surname: " maxlength="254" required>
+                <input type="text" placeholder="Enter email: " required>
+                <input type="password" placeholder="Enter password: " required>
+                <input type="submit" value="Create User">
+            </form>
+        </div>
+        <script defer src="/public/administrator.js"></script>
+    </body>
+</html>

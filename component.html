@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/public/base.css">
+        <title>{{ component.name }} | Component</title>
+    </head>
+    <body>
+        <div class="content">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    {% if current_user.isAdmin %}
+                        <a href="/admin">Administration</a>
+                    {% endif %}
+                <a href="/components">All Components</a>
+                    <a href="/logout">Logout</a>
+                </nav>
+            </header>
+            <h1 id="component-name-h1">Component: {{ component.name }}
+            </h1>
+            <button id="rename-component-btn">Rename</button>
+            <p id="component-type-p">Type: {{ component.type }}
+            </p>
+            <button id="change-type-btn">Change</button>
+            <p id="component-part-number-p">Part Number: {{ component.part_number }}
+            </p>
+            <button id="change-part-number-btn">Change</button>
+            <p id="component-unit-cost-p">Unit Cost: £{{ component.unit_cost }}
+            </p>
+            <button id="change-unit-cost-btn">Change</button>
+            <button id="delete-component-btn">Delete Component</button>
+        </div>
+        <script defer src="/public/component.js"></script>
+    </body>
+</html>

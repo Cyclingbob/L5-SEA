@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/public/base.css">
+        <link rel="stylesheet" href="/public/components.css">
+        <title>Components</title>
+    </head>
+    <body>
+        <div class="content">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    {% if current_user.isAdmin %}
+                        <a href="/admin">Administration</a>
+                    {% endif %}
+                <a href="/components">All Components</a>
+                    <a href="/logout">Logout</a>
+                </nav>
+            </header>
+            <h1>All Registered Components</h1>
+            {% if len(all_components) == 0 %}
+                <p>No components exist yet.</p>
+            {% else %}
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Part Number</th>
+                        <th>Unit Cost</th>
+                        <th>View</th>
+                        {% if current_user.isAdmin %}
+                            <th>Delete</th>
+                        {% endif %}
+                    </tr>
+                    {% for component in all_components %}
+                        <tr>
+                            <td>{{ component.name }}</td>
+                            <td>{{ component.type }}</td>
+                            <td>{{ component.part_number }}</td>
+                            <td>£{{ component.unit_cost }}</td>
+                            <td>
+                                <a href="/component/{{ component.id }}">
+                                    <button>View</button>
+                                </a>
+                            </td>
+                            <td>
+                                {% if current_user.isAdmin %}
+                                    <button class="delete-component-btn" id="delete-component-btn-{{ component.id }}">Delete</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            <br>
+            <h3>Create a component</h3>
+            <form id="create-component-form">
+                <input type="text" placeholder="Enter name: " maxlength="254" required>
+                <input type="text" placeholder="Enter type: " maxlength="254" required>
+                <input type="text" placeholder="Enter part number: " maxlength="254" required>
+                <input type="number" step="0.01" min="0" placeholder="0.00" maxlength="254" required>
+                <input type="submit" value="Create Component">
+            </form>
+        </div>
+        <script defer src="/public/components.js"></script>
+    </body>
+</html>

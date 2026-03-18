@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/public/base.css">
+        <link rel="stylesheet" href="/public/project.css">
+        <title>{{ user.first_name }} {{ user.surname }} | User</title>
+    </head>
+    <body>
+        <div class="content">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    {% if current_user.isAdmin %}
+                        <a href="/admin">Administration</a>
+                    {% endif %}
+                <a href="/components">All Components</a>
+                    <a href="/logout">Logout</a>
+                </nav>
+            </header>
+            <h1 id="user-name-h1">User: {{ user.first_name }} {{ user.surname }}
+            </h1>
+            {% if current_user.isAdmin %}
+            <button id="rename-user-btn">Rename</button>
+            {% endif %}
+            <p id="change-email-p">Email: {{ user.email }}
+            </p>
+            {% if current_user.isAdmin %}
+            <button id="change-email-btn">Change</button>
+            <button id="change-password-btn">Change password</button>
+            <button id="delete-user-btn">Delete User</button>
+            {% endif %}
+        </div>
+        <script defer src="/public/user.js"></script>
+    </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/public/base.css">
+        <title>Home Page</title>
+    </head>
+    <body>
+        <div class="content">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    {% if current_user.isAdmin %}
+                        <a href="/admin">Administration</a>
+                    {% endif %}
+                    <a href="/components">All Components</a>
+                    <a href="/logout">Logout</a>
+                </nav>
+            </header>
+            <h1>Welcome, {{ current_user.first_name }} {{ current_user.surname }}
+                {% if current_user.isAdmin %}
+                (Administrator)
+                {% endif %}
+            </h1>
+            <h2>Your Projects</h2>
+            {% if len(user_projects) == 0 and len(owned_projects) == 0 %}
+                <p>No projects exist yet.</p>
+            {% else %}
+                <table>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Project Category</th>
+                        <th>Project Description</th>
+                        <th>Role</th>
+                        <th>Access</th>
+                    </tr>
+                    {% for project in user_projects %}
+                        <tr>
+                            <td>{{ project.name }}</td>
+                            <td>{{ project.category }}</td>
+                            <td>{{ project.description }}</td>
+                            <td>{{ project.role }}</td>
+                            <td>
+                                <a href="/project/{{ project.project_id }}">
+                                    <button>Access</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% for project in owned_projects %}
+                        <tr>
+                            <td>{{ project.name }}</td>
+                            <td>{{ project.category }}</td>
+                            <td>{{ project.description }}</td>
+                            <td>Owner</td>
+                            <td>
+                                <a href="/project/{{ project.id }}">
+                                    <button>Access</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            <h2>Creating a project</h2>
+            <p>Projects can only be created by an administrator. If you are an administrator, go to <a href="/admin">administration</a> to create one.</p>
+        </div>
+        <script defer src="/public/index.js"></script>
+    </body>
+</html>

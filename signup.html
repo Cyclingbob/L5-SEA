@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/public/base.css">
+        <link rel="stylesheet" href="/public/login.css">
+        <title>Create Account</title>
+    </head>
+    <body>
+        <div class="content">
+            <form id="signup-form" class="login-form">
+                <input name="first_name" type="text" placeholder="Enter your first name " maxlength="128" required>
+                <input name="surname" type="text" placeholder="Enter your surname: " maxlength="128" required>
+                <input name="email" type="text" placeholder="Enter your email: " maxlength="254" required>
+                <input name="password" type="password" placeholder="Enter your password: " maxlength="128" required>
+                <input type="submit" value="Create Account">
+            </form>
+            <p>Already have an account? Login <a href="/login">here</a>.</p>
+        </div>
+        <script defer src="/public/signup.js"></script>
+    </body>
+</html>

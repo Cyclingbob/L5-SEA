@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/public/base.css">
+        <title>{{ system.name }} | System</title>
+    </head>
+    <body>
+        <div class="content">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    {% if current_user.isAdmin %}
+                        <a href="/admin">Administration</a>
+                    {% endif %}
+                <a href="/components">All Components</a>
+                    <a href="/logout">Logout</a>
+                </nav>
+            </header>
+            <h1 id="system-name-h1">System: {{ system.name }}
+            </h1>
+            <p>Part of <a href="/project/{{system_project.id}}">{{ system_project.name }}</a></p>
+            <button id="rename-system-btn">Rename</button>
+            <p id="change-category-p">Category: {{ system.category }}
+            </p>
+            <button id="change-category-btn">Change</button>
+            <p id="system-description-p">Description: {{ system.description }}
+            </p>
+            <button id="change-description-btn">Change</button>
+            {% if current_user.isAdmin %}
+            <button id="delete-system-btn">Delete system</button>
+            {% endif %}
+            <br>
+            <h2>Connections</h2>
+            <p>All current connections in your system are listed here. Use the Connection Builder to create more.</p>
+            {% if len(system_connections) == 0 %}
+                <p>No connections exist yet.</p>
+            {% else %}
+                <table>
+                    {% for connection in system_connections %}
+                        <tr>
+                            <td>
+                                {{ connection.component_a_name }} (Component ID {{ connection.component_a }}) {{ connection.component_a_label }} connects to: {{ connection.component_b_label }} of {{ connection.component_b_name }} (Component ID {{ connection.component_b }})
+                            </td>
+                            <td>
+                                <button class="remove-connection-btn" id="remove-connection-{{ connection.id }}">Remove Connection from System</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <br>
+            {% endif %}
+                <div class="connection-builder-container">
+                    <h3>Connection Builder</h3>
+                    <p>IDs used for this form are shown in the list below on the left side. Each label will be displayed next to the component in the Connections list. If you have two devices, a Raspberry Pi Computer (component A) and an LED (component B), example labels would be GP16 (Label A) for the Pi and Anode (Label B) for the LED , telling the reader how the devices ("Components") are connected together on each end of the connnection.
+                        <br><br>
+                        In some applications, multiple wires go between two components, such as in the case of electronics, therefore, duplicate connections are legal.
+                    </p>
+                    <form id="connection-builder">
+                        <!-- <p>Connection A: <span id="connection-a"></span></p>
+                        <p>Connection B: <span id="connection-b"></span></p> -->
+                        <input type="text" placeholder="System Component A ID: " max="254" required>
+                        <input type="text" placeholder="System Component B ID: " max="254" required>
+                        <input type="text" placeholder="System Component A label: " max="254" required>
+                        <input type="text" placeholder="System Component B label: " max="254" required>
+                        <input type="submit" value="Create">
+                    </form>
+                </div>
+            {% if len(system_components) == 0 %}
+                <h2>System Component List</h2>
+                <p>No components exist yet.</p>
+            {% else %}
+                <h2>System Component List</h2>
+                <p>All components that have been allocated to the System and form part of the total cost and component list. These can and may be connected together in "Connections".</p>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Part Number</th>
+                        <th>Unit Cost</th>
+                        <th>View</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for component in system_components %}
+                        <tr>
+                            <td>{{ component.linked_system }}</td>
+                            <td>{{ component.name }}</td>
+                            <td>{{ component.type }}</td>
+                            <td>{{ component.part_number }}</td>
+                            <td>£{{ component.unit_cost }}</td>
+                            <td>
+                                <a href="/component/{{ component.id }}">
+                                    <button>View</button>
+                                </a>
+                            </td>
+                            <td>
+                                <button class="remove-component-btn" id="remove-component-{{ component.linked_system }}">Remove Component from System</button>
+                            </td>
+                            <!-- <td>
+                                <input type="checkbox" class="cb-a-checkbox" id="cb-checkbox-a-{{ component.linked_system }}">
+                                <label for="cb-checkbox-a-{{ component.id }}">Connection A</label>
+                                <input type="checkbox" class="cb-b-checkbox" id="cb-checkbox-b-{{ component.linked_system }}">
+                                <label for="cb-checkbox-b-{{ component.id }}">Connection B</label>
+                            </td> -->
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            <h2>Component Library</h2>
+            <p>All components added to the application, which may be added to the System Components list. Multiple additions are legal.</p>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Part Number</th>
+                    <th>Unit Cost</th>
+                    <th>View</th>
+                    <th></th>
+                </tr>
+                {% for component in all_components %}
+                    <tr>
+                        <td>{{ component.name }}</td>
+                        <td>{{ component.type }}</td>
+                        <td>{{ component.part_number }}</td>
+                        <td>£{{ component.unit_cost }}</td>
+                        <td>
+                            <a href="/component/{{ component.id }}">
+                                <button>View</button>
+                            </a>
+                        </td>
+                        <td>
+                            <button class="add-component-btn" id="add-component-{{ component.id }}">Add Component to System</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <!-- {% if len(all_components) == 0 %}
+                <p>No components exist yet.</p>
+            {% else %}
+                <h2>List of all components</h2>
+                <p>All components in the app are listed here. When you want to add a new Connection, select connection A for one component and connection B for the other component. If you're daisy chaining the same component.</p>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Part Number</th>
+                        <th>Unit Cost</th>
+                        <th>Select</th>
+                    </tr>
+                    {% for component in all_components %}
+                        <tr>
+                            <td>{{ component.name }}</td>
+                            <td>{{ component.type }}</td>
+                            <td>{{ component.part_number }}</td>
+                            <td>£{{ component.unit_cost }}</td>
+                            <td>
+                                <a href="/component/{{ component.id }}">
+                                    <button>View</button>
+                                </a>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="cb-a-checkbox" id="cb-checkbox-a-{{ component.id }}">
+                                <label for="cb-checkbox-a-{{ component.id }}">Connection A</label>
+                                <input type="checkbox" class="cb-b-checkbox" id="cb-checkbox-b-{{ component.id }}">
+                                <label for="cb-checkbox-b-{{ component.id }}">Connection B</label>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %} -->
+        </div>
+        <script defer src="/public/system.js"></script>
+    </body>
+</html>

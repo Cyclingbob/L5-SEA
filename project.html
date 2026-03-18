@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/public/base.css">
+        <link rel="stylesheet" href="/public/project.css">
+        <title>{{ project.name }} | Project</title>
+    </head>
+    <body>
+        <div class="content">
+            <header>
+                <nav>
+                    <a href="/">Home</a>
+                    {% if current_user.isAdmin %}
+                        <a href="/admin">Administration</a>
+                    {% endif %}
+                <a href="/components">All Components</a>
+                    <a href="/logout">Logout</a>
+                </nav>
+            </header>
+            <h1 id="project-name-h1">Project: {{ project.name }}
+            </h1>
+            {% if current_user.isAdmin %}
+            <button id="rename-project-btn">Rename</button>
+            {% endif %}
+            <p id="change-category-p">Category: {{ project.category }}
+            </p>
+            {% if current_user.isAdmin %}
+            <button id="change-category-btn">Change</button>
+            {% endif %}
+            <p id="project-description-p">Description: {{ project.description }}
+            </p>
+            {% if current_user.isAdmin %}
+            <button id="change-description-btn">Change</button>
+            <button id="delete-project-btn">Delete Project</button>
+            {% endif %}
+            <h2>Project Systems</h2>
+            {% if len(all_project_systems) == 0 %}
+                <p>No project systems exist yet.</p>
+            {% else %}
+                <table>
+                    <tr>
+                        <th>System Name</th>
+                        <th>System Category</th>
+                        <th>System Description</th>
+                        <th>Access</th>
+                    </tr>
+                    {% for system in all_project_systems %}
+                        <tr>
+                            <td>{{ system.name }}</td>
+                            <td>{{ system.category }}</td>
+                            <td>{{ system.description }}</td>
+                            <td>
+                                <a href="/system/{{ system.id }}">
+                                    <button>Access</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            <h2>Create a system</h2>
+            <form id="create-system-form">
+                <input type="text" placeholder="Enter name: " maxlength="254" required>
+                <input type="text" placeholder="Enter category: " maxlength="254" required>
+                <input type="text" placeholder="Enter description: " required>
+                <input type="submit" value="Create System">
+                <input type="text" value="{{ project.id }}" style="display:none">
+            </form>
+            <h2>Allocated Users to this Project</h2>
+            <table>
+                <tr>
+                    <th>First name</th>
+                    <th>Surname</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Owner?</th>
+                    <th>Remove</th>
+                    <th>View</th>
+                </tr>
+                <tr>
+                    <td>{{ project_owner.first_name }}</td>
+                    <td>{{ project_owner.surname }}</td>
+                    <td>{{ project_owner.email }}</td>
+                    <td>Owner</td>
+                    <td>Yes</td>
+                    <td>N/A</td>
+                    <td>
+                        <a href="/user/{{ project_owner.id }}">
+                            <button>View</button>
+                        </a>
+                    </td>
+                </tr>
+                {% if len(project_users) > 0 %}
+                    {% for user in project_users %}
+                        <tr>
+                            <td>{{ user.first_name }}</td>
+                            <td>{{ user.surname }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>No</td>
+                            <td>
+                                {% if current_user.isAdmin %}
+                                    <button class="remove-project-user-btn" id="remove-project-user-{{ user.user_id }}">Remove</button>    
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/user/{{ user.user_id }}">
+                                    <button>View</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <p>No other users have been allocated to this project</p>
+                {% endif %}
+            </table>
+            {% if current_user.isAdmin %}
+                <h2>Add Another User</h2>
+                {% if len(non_project_users) == 0 %}
+                    <p>No other users have not been allocated to this project</p>
+                {% else %}
+                    <table>
+                        <tr>
+                            <th>First name</th>
+                            <th>Surname</th>
+                            <th>Email</th>
+                            <th>Add</th>
+                            <th>View</th>
+                        </tr>
+                        {% for user in non_project_users %}
+                            <tr>
+                                <td>{{ user.first_name }}</td>
+                                <td>{{ user.surname }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <button class="add-project-user-btn" id="add-project-user-{{ user.id }}">Add</button>
+                                </td>
+                                <td>
+                                    <a href="/user/{{ user.id }}">
+                                        <button>View</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            {% endif %}
+        </div>
+        <script defer src="/public/project.js"></script>
+    </body>
+</html>
