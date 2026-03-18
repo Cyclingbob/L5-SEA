@@ -107,4 +107,4 @@ async def not_found_handler(request: Request, exception):
     return templates.TemplateResponse("404.html", context)
 
 if __name__ == "__main__":
-    uvicorn.run(app, port=port)
+    uvicorn.run(app, port=port, host="0.0.0.0")
