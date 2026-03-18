@@ -1,3 +1,15 @@
+import argparse
+import subprocess
+
+parser = argparse.ArgumentParser(description="Create a user")
+
+parser.add_argument('--render', type=str)
+args = parser.parse_args()
+
+if args.render == True: # Running on render.com, so run the setup within this script.
+    subprocess.run(["python", "setup_db.py"])
+    subprocess.run(["python", "insert_example_data.py"])
+
 import uvicorn
 
 from fastapi import FastAPI, Request
