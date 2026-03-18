@@ -9,6 +9,7 @@ args = parser.parse_args()
 if args.render == True: # Running on render.com, so run the setup within this script.
     subprocess.run(["python", "setup_db.py"])
     subprocess.run(["python", "insert_example_data.py"])
+    subprocess.run(["python", "create_user.py", "Joe", "Bloggs", "joe@bloggs.com", "password123", "--admin"])
 
 import uvicorn
 
