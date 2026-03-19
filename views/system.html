@@ -20,18 +20,25 @@
             </header>
             <h1 id="system-name-h1">System: {{ system.name }}
             </h1>
-            <p>Part of <a href="/project/{{system_project.id}}">{{ system_project.name }}</a></p>
-            <button id="rename-system-btn">Rename</button>
-            <p id="change-category-p">Category: {{ system.category }}
-            </p>
-            <button id="change-category-btn">Change</button>
-            <p id="system-description-p">Description: {{ system.description }}
-            </p>
-            <button id="change-description-btn">Change</button>
-            {% if current_user.isAdmin %}
-            <button id="delete-system-btn">Delete system</button>
-            {% endif %}
-            <br>
+            <div class="info-container">
+                <div class="info-box">
+                    <p>Part of <a href="/project/{{system_project.id}}">{{ system_project.name }}</a></p>
+                    <button id="rename-system-btn">Rename System</button>
+                </div>
+                <div class="info-box">
+                    <p id="change-category-p">Category: {{ system.category }}
+                    </p>
+                    <button id="change-category-btn">Change</button>
+                </div>
+                <div class="info-box">
+                    <p id="system-description-p">Description: {{ system.description }}
+                    </p>
+                    <button id="change-description-btn">Change</button>
+                    {% if current_user.isAdmin %}
+                    <button id="delete-system-btn">Delete system</button>
+                    {% endif %}
+                </div>
+            </div>
             <h2>Connections</h2>
             <p>All current connections in your system are listed here. Use the Connection Builder to create more.</p>
             {% if len(system_connections) == 0 %}
@@ -82,7 +89,6 @@
                         <th>Unit Cost</th>
                         <th>View</th>
                         <th></th>
-                        <th></th>
                     </tr>
                     {% for component in system_components %}
                         <tr>
@@ -99,12 +105,6 @@
                             <td>
                                 <button class="remove-component-btn" id="remove-component-{{ component.linked_system }}">Remove Component from System</button>
                             </td>
-                            <!-- <td>
-                                <input type="checkbox" class="cb-a-checkbox" id="cb-checkbox-a-{{ component.linked_system }}">
-                                <label for="cb-checkbox-a-{{ component.id }}">Connection A</label>
-                                <input type="checkbox" class="cb-b-checkbox" id="cb-checkbox-b-{{ component.linked_system }}">
-                                <label for="cb-checkbox-b-{{ component.id }}">Connection B</label>
-                            </td> -->
                         </tr>
                     {% endfor %}
                 </table>

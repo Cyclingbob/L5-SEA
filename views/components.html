@@ -45,11 +45,11 @@
                                     <button>View</button>
                                 </a>
                             </td>
-                            <td>
                                 {% if current_user.isAdmin %}
-                                    <button class="delete-component-btn" id="delete-component-btn-{{ component.id }}">Delete</button>
+                                    <td>
+                                        <button class="delete-component-btn" id="delete-component-btn-{{ component.id }}">Delete</button>
+                                    </td>
                                 {% endif %}
-                            </td>
                         </tr>
                     {% endfor %}
                 </table>

@@ -20,21 +20,27 @@
                 </nav>
             </header>
             <h1 id="project-name-h1">Project: {{ project.name }}
+                {% if current_user.isAdmin %}
+                    <button id="rename-project-btn">Rename</button>
+                {% endif %}
             </h1>
-            {% if current_user.isAdmin %}
-            <button id="rename-project-btn">Rename</button>
-            {% endif %}
-            <p id="change-category-p">Category: {{ project.category }}
-            </p>
-            {% if current_user.isAdmin %}
-            <button id="change-category-btn">Change</button>
-            {% endif %}
-            <p id="project-description-p">Description: {{ project.description }}
-            </p>
-            {% if current_user.isAdmin %}
-            <button id="change-description-btn">Change</button>
-            <button id="delete-project-btn">Delete Project</button>
-            {% endif %}
+            <div class="info-container">
+                <div class="info-box">
+                    <p id="change-category-p"><b>Category</b>: {{ project.category }}
+                    </p>
+                    {% if current_user.isAdmin %}
+                        <button id="change-category-btn">Change</button>
+                    {% endif %}
+                </div>
+                <div class="info-box">
+                    <p id="project-description-p"><b>Description</b>: {{ project.description }}
+                    </p>
+                    {% if current_user.isAdmin %}
+                        <button id="change-description-btn">Change</button>
+                        <button id="delete-project-btn">Delete Project</button>
+                    {% endif %}
+                </div>
+            </div>
             <h2>Project Systems</h2>
             {% if len(all_project_systems) == 0 %}
                 <p>No project systems exist yet.</p>
