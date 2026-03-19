@@ -17,6 +17,7 @@ create_component_form.addEventListener("submit", event => {
     .then(res => res.json())
     .then(data => {
         if(data.success){
+            alert("Component was created!")
             window.location = "/component/" + data.id
             // alert(data.id)
         } else {

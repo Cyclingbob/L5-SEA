@@ -16,3 +16,18 @@
     width: 400px;
     display: block;
 }
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+    margin: 0;
+    background-color: #d8d8d8;
+}
+.content {
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+    padding-top: 0px;
+    background-color: white;
+    min-height: 100%;
+}

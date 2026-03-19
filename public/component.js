@@ -136,6 +136,7 @@ delete_component_btn.addEventListener("click", () => {
     .then(res => res.json())
     .then(data => {
         if(data.success){
+            alert("Component was deleted!")
             window.location = "/components"
         } else {
             if(data.error){

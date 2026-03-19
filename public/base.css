@@ -8,7 +8,8 @@ body {
 .content {
     width: 800px;
     margin: 0 auto;
-    padding: 5px;
+    padding: 10px;
+    padding-top: 0px;
     background-color: white;
     min-height: 100%;
 }
@@ -33,4 +34,57 @@ header nav a {
 header nav a:hover {
     color: lightgray;
     cursor: pointer;
+}
+table {
+    border-collapse: collapse;
+    table-layout: auto;
+    width: auto;
+    max-width: 100%;
+}
+th, td {
+    border: 1px solid #333;
+    padding: 8px 12px;
+    overflow-wrap: anywhere;
+    word-wrap: break-word;
+    white-space: normal;
+}
+button, form input[type=submit] {
+    background-color: rgb(105, 217, 255);
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 0 5px
+}
+form input[type=text], form input[type=password], form input[type=number]{
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 10px 5px;
+}
+h1 {
+    text-align: center;
+}
+h2 {
+    margin: 10px 5px
+}
+h3 {
+    margin: 5px
+}
+.info-container {
+    border: 1px solid gray;
+    background-color: rgb(201, 241, 255);
+    border-radius: 10px;
+    padding: 10px;
+}
+.info-container .info-box {
+    display: flex;
+    margin: 5px 0
+}
+p {
+    margin: 5px;
+}
+a:visited {
+    color: black;
+}
+header nav a:visited {
+    color: white;
 }

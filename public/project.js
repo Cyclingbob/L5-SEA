@@ -19,6 +19,7 @@ if (create_system_form) create_system_form.addEventListener("submit", event => {
     .then(res => res.json())
     .then(data => {
         if(data.success){
+            alert("System was created!")
             window.location = "/system/" + data.id
             // alert(data.id)
         } else {
@@ -133,6 +134,7 @@ if(delete_project_btn) delete_project_btn.addEventListener("click", () => {
     .then(res => res.json())
     .then(data => {
         if(data.success){
+            alert("Project was deleted!")
             window.location = "/admin"
         } else {
             if(data.error){
@@ -164,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             }).then(res => res.json()).then(data => {
                 if(data.success){
+                    alert("User was added to the project!")
                     window.location = "/project/" + project_id
                 } else {
                     if(data.error){
@@ -183,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "DELETE",
             }).then(res => res.json()).then(data => {
                 if(data.success){
+                    alert("User was removed from the project!")
                     window.location = "/project/" + project_id
                 } else {
                     if(data.error){

@@ -16,6 +16,7 @@ create_project_form.addEventListener("submit", event => {
     .then(res => res.json())
     .then(data => {
         if(data.success){
+            alert("Project was created!")
             window.location = "/project/" + data.id
             // alert(data.id)
         } else {
@@ -47,6 +48,7 @@ create_user_form.addEventListener("submit", event => {
     .then(res => res.json())
     .then(data => {
         if(data.success){
+            alert("User was created!")
             window.location = "/user/" + data.id
             // alert(data.id)
         } else {

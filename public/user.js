@@ -106,6 +106,7 @@ delete_user_btn.addEventListener("click", () => {
     .then(res => res.json())
     .then(data => {
         if(data.success){
+            alert("User was deleted!")
             window.location = "/admin"
         } else {
             if(data.error){

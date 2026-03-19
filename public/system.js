@@ -102,6 +102,7 @@ if(delete_system_btn) delete_system_btn.addEventListener("click", () => { // Not
     .then(res => res.json())
     .then(data => {
         if(data.success){
+            alert("System was deleted!")
             window.location = "/admin"
         } else {
             if(data.error){
@@ -141,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "POST"
             }).then(res => res.json()).then(data => {
                 if(data.success){
+                    alert("System Component was added to the system!")
                     window.location = "/system/" + system_id
                 } else {
                     alert(data.error)
@@ -157,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "DELETE"
             }).then(res => res.json()).then(data => {
                 if(data.success){
+                    alert("System Component was removed from the system")
                     window.location = "/system/" + system_id
                 } else {
                     alert(data.error)
@@ -208,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: "DELETE"
             }).then(res => res.json()).then(data => {
                 if(data.success){
+                    alert("System Connection was removed")
                     window.location = "/system/" + system_id
                 } else {
                     alert(data.error)
