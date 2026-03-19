@@ -1,12 +1,10 @@
-import argparse
 import subprocess
+import os
 
-parser = argparse.ArgumentParser(description="Create a user")
+from config import public_path, view_path, database_file, port
 
-parser.add_argument('--render', type=str)
-args = parser.parse_args()
 
-if args.render == True: # Running on render.com, so run the setup within this script.
+if not os.path.exists(database_file): # No database present, so run the setup within this script.
     subprocess.run(["python", "setup_db.py"])
     subprocess.run(["python", "insert_example_data.py"])
     subprocess.run(["python", "create_user.py", "Joe", "Bloggs", "joe@bloggs.com", "password123", "--admin"])
@@ -25,9 +23,6 @@ from project_router import projectRouter
 from system_router import systemRouter
 from componentRouter import componentRouter
 from user_router import userRouter
-
-from config import public_path, view_path, database_file, port
-
 app = FastAPI()
 app.state.db = Database(database_file)
 templates = Jinja2Templates(directory=view_path)
@@ -58,7 +53,6 @@ def read_root(request: Request):
 
     owned_projects = []
     for project in all_projects:
-        print
         if project["owner"] == current_user["id"]:
             owned_projects.append(project)
 

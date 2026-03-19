@@ -1,5 +1,3 @@
-# Run setup_db.py first!
-
 import unittest
 import hashlib
 import sqlite3
@@ -27,7 +25,7 @@ class TestDBMethods(unittest.TestCase):
         hashedPassword = hashPassword(password)
 
         result = db.createUser(first_name, surname, email, password)
-        self.assertEqual(result, "success")
+        self.assertEqual(result, 1) # ID of firsy item
 
         select_user_q = '''
             SELECT first_name, surname, email, password FROM Users WHERE email = ?
@@ -140,6 +138,172 @@ class TestDBMethods(unittest.TestCase):
         new_rows = cursor.fetchall()
 
         self.assertTrue(len(new_rows) == 0, "Item wasn't deleted")
+
+# Project tests
+
+class TestProjectMethods(unittest.TestCase):
+    def test_5_create_project(self):
+        # First create a user (owner)
+        user_id = db.createUser("Helen", "Owner", "Helen@test.com", "Password123")
+
+        name = "Project Alpha"
+        category = "Software"
+        description = "Test project"
+        owner = user_id
+
+        result = db.createProject(name, category, description, owner)
+        self.assertEqual(result, 1)
+
+        query = '''
+            SELECT name, category, description, owner FROM Projects WHERE name = ?
+        '''
+        cursor.execute(query, (name,))
+        rows = cursor.fetchall()
+
+        self.assertEqual(len(rows), 1)
+
+        row = rows[0]
+        self.assertEqual(row[0], name)
+        self.assertEqual(row[1], category)
+        self.assertEqual(row[2], description)
+        self.assertEqual(row[3], owner)
+
+    def test_6_edit_project(self):
+        # Get project ID
+        query = "SELECT id FROM Projects WHERE name = ?"
+        cursor.execute(query, ("Project Alpha",))
+        rows = cursor.fetchall()
+
+        self.assertTrue(len(rows) > 0, "Project not found for edit")
+
+        project_id = rows[0][0]
+
+        new_name = "Project Beta"
+        new_category = "Hardware"
+        new_description = "Updated project"
+
+        result = db.editProject(project_id, new_name, new_category, new_description)
+        self.assertEqual(result, "success", result)
+
+        verify_q = '''
+            SELECT name, category, description FROM Projects WHERE id = ?
+        '''
+        cursor.execute(verify_q, (project_id,))
+        updated_rows = cursor.fetchall()
+
+        self.assertEqual(len(updated_rows), 1)
+
+        row = updated_rows[0]
+        self.assertEqual(row[0], new_name)
+        self.assertEqual(row[1], new_category)
+        self.assertEqual(row[2], new_description)
+
+    def test_7_delete_project(self):
+        query = "SELECT id FROM Projects WHERE name = ?"
+        cursor.execute(query, ("Project Beta",))
+        rows = cursor.fetchall()
+
+        self.assertTrue(len(rows) > 0, "Nothing to delete")
+
+        project_id = rows[0][0]
+
+        result = db.deleteProject(project_id)
+        self.assertEqual(result, "success", result)
+
+        verify_q = "SELECT id FROM Projects WHERE id = ?"
+        cursor.execute(verify_q, (project_id,))
+        new_rows = cursor.fetchall()
+
+        self.assertEqual(len(new_rows), 0, "Project wasn't deleted")
+
+    def test_8_project_duplicate_name(self):
+        user_id = db.createUser("Bob", "Test", "bob@test.com", "Password123")
+
+        db.createProject("UniqueProj", "Test", "Desc", user_id)
+        result = db.createProject("UniqueProj", "Test", "Desc", user_id)
+
+        self.assertNotEqual(result, 1)  #should fail
+
+    def test_9_project_invalid_owner(self):
+        result = db.createProject("BadProj", "Test", "Desc", 9999)
+        self.assertNotEqual(result, 1)
+
+# Test user projects
+
+class TestUserProjectMethods(unittest.TestCase):
+    def test_10_create_user_project(self):
+        user_id = db.createUser("Tom", "Link", "tom@test.com", "Password123")
+        project_id = db.createProject("Link Project", "Test", "Desc", user_id)
+
+        role = "Developer"
+
+        result = db.createUserProject(user_id, project_id, role)
+
+        self.assertTrue(isinstance(result, str))
+        self.assertEqual(result, "success")
+
+        query = '''
+            SELECT user_id, project_id, role FROM UserProjects
+            WHERE user_id = ? AND project_id = ?
+        '''
+        cursor.execute(query, (user_id, project_id))
+        rows = cursor.fetchall()
+
+        self.assertEqual(len(rows), 1)
+
+        row = rows[0]
+        self.assertEqual(row[0], user_id)
+        self.assertEqual(row[1], project_id)
+        self.assertEqual(row[2], role)
+
+    def test_11_duplicate_user_project(self):
+        user_id = db.createUser("Dup", "User", "dup@test.com", "Password123")
+        project_id = db.createProject("Dup Project", "Test", "Desc", user_id)
+
+        db.createUserProject(user_id, project_id, "Tester")
+        result = db.createUserProject(user_id, project_id, "Tester")
+
+        self.assertTrue(isinstance(result, str))
+        self.assertNotEqual(result, "success")
+
+    def test_12_update_user_role(self):
+        user_id = db.createUser("Role", "User", "role@test.com", "Password123")
+        project_id = db.createProject("Role Project", "Test", "Desc", user_id)
+
+        db.createUserProject(user_id, project_id, "Viewer")
+
+        new_role = "Admin"
+
+        result = db.editUserProject(user_id, project_id, new_role)
+        self.assertEqual(result, "success", result)
+
+        query = '''
+            SELECT role FROM UserProjects
+            WHERE user_id = ? AND project_id = ?
+        '''
+        cursor.execute(query, (user_id, project_id))
+        rows = cursor.fetchall()
+
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][0], new_role)
+
+    def test_13_delete_user_project(self):
+        user_id = db.createUser("Del", "User", "del@test.com", "Password123")
+        project_id = db.createProject("Del Project", "Test", "Desc", user_id)
+
+        db.createUserProject(user_id, project_id, "Dev")
+
+        result = db.deleteUserProject(user_id, project_id)
+        self.assertEqual(result, "success", result)
+
+        query = '''
+            SELECT * FROM UserProjects
+            WHERE user_id = ? AND project_id = ?
+        '''
+        cursor.execute(query, (user_id, project_id))
+        rows = cursor.fetchall()
+
+        self.assertEqual(len(rows), 0, "UserProject wasn't deleted")
 
 if __name__ == '__main__':
     unittest.main()

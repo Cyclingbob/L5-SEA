@@ -181,17 +181,16 @@ rows = cursor.fetchall()
 print(rows)
 
 user_projects = [
-    {"user_id": 1, "project_id": 3, "role": "Software Engineer"},
-    {"user_id": 2, "project_id": 6, "role": "Systems Engineer"},
-    {"user_id": 3, "project_id": 1, "role": "Radar Engineer"},
-    {"user_id": 4, "project_id": 8, "role": "Integration Engineer"},
-    {"user_id": 5, "project_id": 4, "role": "Avionics Engineer"},
-    {"user_id": 6, "project_id": 7, "role": "Data Engineer"},
-    {"user_id": 7, "project_id": 2, "role": "Electronic Warfare Specialist"},
-    {"user_id": 8, "project_id": 9, "role": "Communications Engineer"},
-    {"user_id": 9, "project_id": 5, "role": "Systems Integration Engineer"},
-    {"user_id": 10, "project_id": 10, "role": "AI/ML Engineer"},
-
+    {"user_id": 2, "project_id": 1, "role": "Systems Engineer"},              # owner is 3
+    {"user_id": 3, "project_id": 2, "role": "Radar Engineer"},                # owner is 7
+    {"user_id": 4, "project_id": 3, "role": "Integration Engineer"},          # owner is 1
+    {"user_id": 1, "project_id": 4, "role": "Software Engineer"},             # owner is 5
+    {"user_id": 6, "project_id": 5, "role": "Data Engineer"},                 # owner is 9
+    {"user_id": 5, "project_id": 6, "role": "Avionics Engineer"},             # owner is 2
+    {"user_id": 7, "project_id": 7, "role": "Electronic Warfare Specialist"}, # owner is 6
+    {"user_id": 8, "project_id": 8, "role": "Communications Engineer"},       # owner is 4
+    {"user_id": 10, "project_id": 9, "role": "AI/ML Engineer"},               # owner is 8
+    {"user_id": 9, "project_id": 10, "role": "Systems Integration Engineer"}, # owner is 10
 ]
 
 insert_user_projects_q = """

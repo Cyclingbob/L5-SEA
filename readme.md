@@ -20,28 +20,33 @@ Linux/Mac: `source venv/bin/activate`<r>
 3) Install the required libraries: `pip install -r requirements.txt`
 > `requirements.txt` describes the required packages to PIP.
 
-4) Setup the database
-Run `python setup_db.py`<br>
-This will create all of the required tables for the SQLite database
-> This uses the config file `config.py` for the name of the database file.
+4) Ensure that port `80` is not owned by any processes on your computer and free to be used by the main application. Close any applications using this port, or change the port in `config.py`
 
-5) Add sample data
-Run `python insert_example_data.py`<br>
-This will insert sample data for the SQLite database
-> This uses the config file `config.py` for the name of the database file.
-
-6) Create an administrator user <br>
-For security reasons, administrator users can only be created on the command line.<br>
-Run `python create_user.py Joe Bloggs joe@bloggs.com secret_password --admin`
->The `--admin` flag tells SQLite that the user is an administator. Omitting this flag creates a regular user. This utility can only be run whilst the main application is not running.
-
-7) Ensure that port `80` is not owned by any processes on your computer and free to be used by the main application. Close any applications using this port, or change the port in `config.py`
-
-8) Setup is complete!
-
+5) The application will automatically setup the database and sample data in the absence of "database.db".
 
 ## Using the application
 1) Run `python main.py` to start the FastAPI webserver.
 2) Access [localhost](http://localhost)
 3) You will be redirected to the login page.
 4) Use the equivalent login details provided during setup, or any other users that have since been created.
+
+## Manual setup
+Perform manual setup if the automatic setup fails.
+
+1) Setup the database
+Run `python setup_db.py`<br>
+This will create all of the required tables for the SQLite database
+> This uses the config file `config.py` for the name of the database file.
+
+2) Add sample data
+Run `python insert_example_data.py`<br>
+This will insert sample data for the SQLite database
+> This uses the config file `config.py` for the name of the database file.
+
+3) Create an administrator user <br>
+For security reasons, administrator users can only be created on the command line.<br>
+Run `python create_user.py Joe Bloggs joe@bloggs.com secret_password --admin`
+>The `--admin` flag tells SQLite that the user is an administator. Omitting this flag creates a regular user. This utility can only be run whilst the main application is not running.
+
+## Running Unit Tests
+To run the unit tests, run `python unit_tests.py`

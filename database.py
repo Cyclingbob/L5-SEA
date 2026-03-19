@@ -94,15 +94,17 @@ class Database:
             rows = self._cursor.fetchall()
 
             # Array of (first_name, surname, email, password)
-            if rows[0]:
-                return {
-                    "first_name": rows[0][0],
-                    "surname": rows[0][1],
-                    "email": rows[0][2],
-                    "password": rows[0][3],
-                    "isAdmin": rows[0][4] == 1,
-                    "id": rows[0][5]
-                }
+            
+            if isinstance(rows, list):
+                if len(rows) > 0:
+                    return {
+                        "first_name": rows[0][0],
+                        "surname": rows[0][1],
+                        "email": rows[0][2],
+                        "password": rows[0][3],
+                        "isAdmin": rows[0][4] == 1,
+                        "id": rows[0][5]
+                    }
             else:
                 return "notfound"
         except sqlite3.Error as e:
